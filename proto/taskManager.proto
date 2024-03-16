@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package taskManager;
+message Task {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+service TaskManager {
+  rpc createTask(createTaskReq) returns (createTaskResponse) {}
+  rpc updateTask(updateTaskReq) returns (updateTaskResp) {}
+  rpc deleteTask(deleteOneTaskReq) returns (deleteOneTaskResp) {}
+  rpc getOneTask(getOneTaskReq) returns (getOneTaskResp) {}
+  rpc getAllTasks(getAllTasksReq) returns (getAllTasksResp) {}
+}
+message updateTaskReq {
+  string id = 1;
+  message data {
+    string title = 1;
+    string description = 2;
+  }
+}
+message updateTaskResp { bool success = 1; }
+message deleteOneTaskReq { string id = 1; }
+message deleteOneTaskResp { bool success = 1; }
+message getOneTaskReq { string id = 1; }
+message getOneTaskResp {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+}
+message getAllTasksReq {
+  int64 limit = 1;
+  int64 offset = 2;
+}
+message getAllTasksResp {
+  repeated Task tasks = 1;
+  int64 pageSize = 2;
+  int64 total = 3;
+}
+
+message createTaskReq {
+  optional string parentId = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message createTaskResponse { bool success = 1; }
