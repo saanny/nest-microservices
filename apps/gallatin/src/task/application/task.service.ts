@@ -21,8 +21,7 @@ export class TaskService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-  ) {
-  }
+  ) {}
   async createTask(createTaskDto: CreateTaskDto) {
     try {
       this.commandBus.register([CreateTaskHandler]);
