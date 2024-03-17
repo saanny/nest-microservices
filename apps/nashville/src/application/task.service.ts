@@ -7,9 +7,7 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { map } from 'rxjs';
 import { UpdateOneTaskDto } from '../presenters/http/dto/update-task.dto';
-import { DeleteOneTaskDto } from '../presenters/http/dto/delete-one-task.dto';
 import { GetAllTaskPaginationDto } from '../presenters/http/dto/get-all-tasks.dto';
-import { GetOneTaskDto } from '../presenters/http/dto/get-one-task.dto';
 
 @Injectable()
 export class NashvilleService implements OnModuleInit {
@@ -29,32 +27,49 @@ export class NashvilleService implements OnModuleInit {
       }),
     );
   }
-  async updateTask(data: UpdateOneTaskDto) {
-    return this.taskManager.updateTask(data).pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+  async updateTask(id: string, data: UpdateOneTaskDto) {
+    return this.taskManager
+      .updateTask({
+        ...data,
+        id,
+      })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
   }
-  async getOneTask(data: GetOneTaskDto) {
-    return this.taskManager.getOneTask(data).pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+  async getOneTask(id: string) {
+    return this.taskManager
+      .getOneTask({
+        id,
+      })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
   }
   async getAllTasks(data: GetAllTaskPaginationDto) {
     return this.taskManager.getAllTasks(data).pipe(
       map((res) => {
-        return res;
+        return {
+          ...res,
+          pageSize: Number(res.pageSize),
+          total: Number(res.total),
+        };
       }),
     );
   }
-  async deleteOneTask(data: DeleteOneTaskDto) {
-    return this.taskManager.deleteTask(data).pipe(
-      map((res) => {
-        return res;
-      }),
-    );
+  async deleteOneTask(id: string) {
+    return this.taskManager
+      .deleteTask({
+        id,
+      })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+      );
   }
 }

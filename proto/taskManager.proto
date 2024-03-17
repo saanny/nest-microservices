@@ -17,10 +17,10 @@ service TaskManager {
 }
 message updateTaskReq {
   string id = 1;
-  message data {
-    string title = 1;
-    string description = 2;
-  }
+
+  optional string title = 2;
+  optional string description = 3;
+  optional string parentId = 4;
 }
 message updateTaskResp { bool success = 1; }
 message deleteOneTaskReq { string id = 1; }

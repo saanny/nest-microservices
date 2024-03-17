@@ -1,10 +1,17 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { TaskModule } from './application/task.module';
+import { TaskModule } from './task/application/task.module';
+import { TaskInfrastructureModule } from './task/infrastructure/task-infrastructure.module';
 import { CoreModule } from './core/core.module';
-import { TaskInfrastructureModule } from './infrastructure/task-infrastructure.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
-  imports: [CqrsModule.forRoot()],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    CqrsModule.forRoot(),
+  ],
   controllers: [],
   providers: [],
 })

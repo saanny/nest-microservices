@@ -8,13 +8,17 @@ import {
   TASK_MANAGER_SERVICE_NAME,
 } from 'proto/taskManager';
 import { join } from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 console.log(join(__dirname, '..', '..', '..', 'proto', 'taskManager.proto'));
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     ClientsModule.registerAsync([
       {
         name: TASK_MANAGER_SERVICE_NAME,
-        useFactory: () => ({
+        useFactory: (config: ConfigService) => ({
           transport: Transport.GRPC,
           options: {
             protoPath: join(
@@ -26,9 +30,10 @@ console.log(join(__dirname, '..', '..', '..', 'proto', 'taskManager.proto'));
               'taskManager.proto',
             ),
             package: TASK_MANAGER_PACKAGE_NAME,
-            url: 'localhost:3002',
+            url: config.get<string>('GALLATIN_GRPC_URL'),
           },
         }),
+        inject: [ConfigService],
       },
     ]),
   ],

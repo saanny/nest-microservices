@@ -15,6 +15,7 @@ import { UpdateOneTaskDto } from './dto/update-task.dto';
 import { DeleteOneTaskDto } from './dto/delete-one-task.dto';
 import { GetOneTaskDto } from './dto/get-one-task.dto';
 import { GetAllTaskPaginationDto } from './dto/get-all-tasks.dto';
+
 @WebSocketGateway()
 export class TaskManagerGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -40,36 +41,43 @@ export class TaskManagerGateway
     this.clients.delete(client);
   }
   @SubscribeMessage('createTask')
-  async createTask(
+  createTask(
     @MessageBody(
       new ValidationPipe({
-        forbidUnknownValues: true,
         whitelist: true,
         forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     )
     body: CreateTaskDto,
   ) {
-    const result = await this.nashvilleService.createTask(body);
-    this.server.emit('onCreateTask', result);
+    return this.nashvilleService.createTask(body);
   }
   @SubscribeMessage('updateTask')
-  async updateTask(
+  updateTask(
     @MessageBody(
       new ValidationPipe({
-        forbidUnknownValues: true,
         whitelist: true,
         forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     )
     body: UpdateOneTaskDto,
   ) {
-    const result = await this.nashvilleService.updateTask(body);
-    this.server.emit('onUpdateTask', result);
+    return this.nashvilleService.updateTask(body.id, {
+      description: body.description,
+      title: body.title,
+    });
   }
 
   @SubscribeMessage('deleteTask')
-  async deleteTask(
+  deleteTask(
     @MessageBody(
       new ValidationPipe({
         forbidUnknownValues: true,
@@ -79,11 +87,10 @@ export class TaskManagerGateway
     )
     body: DeleteOneTaskDto,
   ) {
-    const result = await this.nashvilleService.deleteOneTask(body);
-    this.server.emit('onDeleteTask', result);
+    return this.nashvilleService.deleteOneTask(body.id);
   }
   @SubscribeMessage('getOneTask')
-  async getOneTask(
+  getOneTask(
     @MessageBody(
       new ValidationPipe({
         forbidUnknownValues: true,
@@ -93,21 +100,23 @@ export class TaskManagerGateway
     )
     body: GetOneTaskDto,
   ) {
-    const result = await this.nashvilleService.getOneTask(body);
-    this.server.emit('onGetOneTask', result);
+    return this.nashvilleService.getOneTask(body.id);
   }
   @SubscribeMessage('getAllTasks')
-  async getAllTasks(
+  getAllTasks(
     @MessageBody(
       new ValidationPipe({
-        forbidUnknownValues: true,
         whitelist: true,
         forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     )
     body: GetAllTaskPaginationDto,
   ) {
-    const result = await this.nashvilleService.getAllTasks(body);
-    this.server.emit('onGetAllTasks', result);
+    console.log(body);
+    return this.nashvilleService.getAllTasks(body);
   }
 }

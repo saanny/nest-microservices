@@ -14,11 +14,9 @@ export interface Task {
 
 export interface updateTaskReq {
   id: string;
-}
-
-export interface updateTaskReq_data {
-  title: string;
-  description: string;
+  title?: string | undefined;
+  description?: string | undefined;
+  parentId?: string | undefined;
 }
 
 export interface updateTaskResp {

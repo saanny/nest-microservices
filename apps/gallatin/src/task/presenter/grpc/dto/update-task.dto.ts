@@ -12,6 +12,7 @@ export class UpdateOneTaskDto implements updateTaskReq {
   @IsString()
   @IsOptional()
   description: string;
+
   @IsString()
   @IsOptional()
   parentId: string;

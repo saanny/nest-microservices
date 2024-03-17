@@ -1,14 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { AshlandModule } from './ashland.module';
+import { LoggerModule } from './application/logger.module';
 import { Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AshlandModule);
+  const app = await NestFactory.create(LoggerModule);
+  const config = app.get<ConfigService>(ConfigService);
+  console.log(config.get<string>('ASHLAND_QUEUE'));
+
   app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'logger',
+      urls: [config.get<string>('ASHLAND_URLS')],
+      queue: config.get<string>('ASHLAND_QUEUE'),
     },
   });
   await app.startAllMicroservices();

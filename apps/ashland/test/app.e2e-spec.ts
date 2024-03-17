@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AshlandModule } from './../src/ashland.module';
+import { AshlandModule } from '../src/application/logger.module';
 
 describe('AshlandController (e2e)', () => {
   let app: INestApplication;

@@ -1,24 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { NashvilleModule } from './application/task.module';
 import { ValidationPipe } from '@nestjs/common';
-import { Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(NashvilleModule);
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'nashville_task_logs',
-    },
-  });
-  await app.startAllMicroservices();
+  const config = app.get<ConfigService>(ConfigService);
   app.useGlobalPipes(
     new ValidationPipe({
-      forbidUnknownValues: true,
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
-  await app.listen(6000);
+
+  await app.listen(config.get<string>('NASHVILLE_HTTP_PORT'));
 }
 bootstrap();

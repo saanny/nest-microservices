@@ -1,7 +1,35 @@
 version: '3.9'
 services:
-  postgresGallatinWriteDb:
-    container_name: postgres_gallatin_write_db_container
+  nashville:
+    build:
+      context: .
+      dockerfile: ./apps/nashville/Dockerfile
+      target: development
+    command: pnpm run start:dev nashville
+    ports:
+     - '5000:5000'
+    volumes:
+      - .:/user/src/app
+  gallatin:
+    build:
+      context: .
+      dockerfile: ./apps/gallatin/Dockerfile
+      target: development
+    command: pnpm run start:dev gallatin 
+    ports:
+     - '3002:3002'
+    volumes:
+      - .:/user/src/app      
+  ashland:
+    build:
+      context: .
+      dockerfile: ./apps/ashland/Dockerfile
+      target: development
+    command: pnpm run start:dev ashland 
+    volumes:
+      - .:/user/src/app        
+  postgresDb:
+    container_name: postgres_db_container
     image: postgres
     restart: always
     environment:
@@ -12,20 +40,6 @@ services:
       - 5432:5432
     volumes:
       - ./docker-volumes/postgresql-gallatin:/var/lib/postgresql
-  mysqlGallatinReadDb:
-    container_name: mysql_gallatin_read_db_container
-    image: mysql
-    command: --init-file /data/application/init.sql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: admintest
-      MYSQL_DATABASE: gallatin_read
-      MYSQL_PASSWORD: admintest
-    ports:
-      - 3306:3306
-    volumes:
-      - ./init.sql:/data/application/init.sql
-      - ./docker-volumes/mysql-auth:/var/lib/mysql
   rabbitmq:
     container_name: rabbitmq_container
     image: rabbitmq:3.13-rc-management-alpine
