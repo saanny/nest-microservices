@@ -24,6 +24,8 @@ export class TaskService {
   ) {}
   async createTask(createTaskDto: CreateTaskDto) {
     try {
+      // I tried to register handlers without doing it manualy but didn't work maybe
+      // there is a bug exist in CQRS package because i check all the possible solution
       this.commandBus.register([CreateTaskHandler]);
       await this.commandBus.execute(
         new CreateTaskCommand(
