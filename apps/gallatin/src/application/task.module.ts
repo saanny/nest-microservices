@@ -31,6 +31,7 @@ export class TaskModule {
     return {
       module: TaskModule,
       imports: [infrastructureModule],
-    };
+     
+    }; 
   }
 }

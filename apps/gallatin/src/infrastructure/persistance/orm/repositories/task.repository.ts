@@ -17,12 +17,19 @@ export class OrmTaskRepository implements TaskRepository {
     private readonly taskRepository: Repository<TaskEntity>,
   ) {}
   async create(task: TaskManager): Promise<TaskManager> {
+    
     let parent;
     if (task.parentId) {
       parent = await this.getOne(task.parentId);
       parent = TaskMapper.toPersistence(parent);
     }
+   
     const persistenceModel = TaskMapper.toPersistence(task, parent);
+
+    if(!persistenceModel.parentId){
+      delete persistenceModel.parentId
+    }
+    
     const newEntity = await this.taskRepository.save(persistenceModel);
     return TaskMapper.toDomain(newEntity);
   }
@@ -51,7 +58,7 @@ export class OrmTaskRepository implements TaskRepository {
       where: {
         id: id,
       },
-      relations: ['parent'],
+      relations: ['parentId','children'],
     });
 
     return TaskMapper.toDomain(result);

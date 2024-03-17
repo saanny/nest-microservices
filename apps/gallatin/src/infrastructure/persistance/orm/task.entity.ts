@@ -1,14 +1,16 @@
-import { Column, Entity, PrimaryColumn, Tree, TreeParent } from 'typeorm';
+import { Column, Entity, PrimaryColumn,TreeChildren, Tree, TreeParent, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('tasks')
-@Tree('nested-set')
 export class TaskEntity {
   @PrimaryColumn('uuid')
   id: string;
 
-  @TreeParent()
-  parentId: TaskEntity;
-
+  
+  @ManyToOne((type) => TaskEntity, (task) => task.children)
+    parentId: TaskEntity
+ 
+    @OneToMany((type) => TaskEntity, (task) => task.parentId)
+    children: TaskEntity[]
   @Column()
   title: string;
 

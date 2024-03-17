@@ -22,7 +22,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
       command.description,
       command.parentId,
     );
-    console.log(task);
+    
     return this.taskRepository.create(task);
   }
 }

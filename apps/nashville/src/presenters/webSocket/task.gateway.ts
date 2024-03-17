@@ -11,10 +11,10 @@ import { Server, Socket } from 'socket.io';
 import { CreateTaskDto } from '../http/dto/create-task.dto';
 import { ValidationPipe } from '@nestjs/common';
 import { NashvilleService } from '../../application/task.service';
-import { UpdateOneTaskDto } from '../http/dto/update-task.dto';
-import { DeleteOneTaskDto } from '../http/dto/delete-one-task.dto';
-import { GetOneTaskDto } from '../http/dto/get-one-task.dto';
-import { GetAllTaskPaginationDto } from '../http/dto/get-all-tasks.dto';
+import { UpdateOneTaskDto } from './dto/update-task.dto';
+import { DeleteOneTaskDto } from './dto/delete-one-task.dto';
+import { GetOneTaskDto } from './dto/get-one-task.dto';
+import { GetAllTaskPaginationDto } from './dto/get-all-tasks.dto';
 @WebSocketGateway()
 export class TaskManagerGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
