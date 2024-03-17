@@ -1,22 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NashvilleController } from './task.controller';
-import { NashvilleService } from '../../application/task.service';
+import { HttpTaskController } from './task.controller';
+import { TaskService } from '../../application/task.service';
 
-describe('NashvilleController', () => {
-  let nashvilleController: NashvilleController;
+describe('HtppTaskController', () => {
+  let httpController: HttpTaskController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [NashvilleController],
-      providers: [NashvilleService],
+      controllers: [HttpTaskController],
+      providers: [TaskService],
     }).compile();
 
-    nashvilleController = app.get<NashvilleController>(NashvilleController);
+    httpController = app.get<HttpTaskController>(HttpTaskController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(nashvilleController.getHello()).toBe('Hello World!');
+    it('should create task"', () => {
+      expect(
+        httpController.createTask({
+          description: 'test',
+          title: 'test',
+        }),
+      ).toMatchObject({
+        success: true,
+      });
     });
   });
 });

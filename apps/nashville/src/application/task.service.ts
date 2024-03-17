@@ -10,7 +10,7 @@ import { UpdateOneTaskDto } from '../presenters/http/dto/update-task.dto';
 import { GetAllTaskPaginationDto } from '../presenters/http/dto/get-all-tasks.dto';
 
 @Injectable()
-export class NashvilleService implements OnModuleInit {
+export class TaskService implements OnModuleInit {
   private taskManager: TaskManagerClient;
   constructor(
     @Inject(TASK_MANAGER_SERVICE_NAME) private readonly client: ClientGrpc,

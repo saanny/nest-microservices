@@ -10,7 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { CreateTaskDto } from '../http/dto/create-task.dto';
 import { ValidationPipe } from '@nestjs/common';
-import { NashvilleService } from '../../application/task.service';
+import { TaskService } from '../../application/task.service';
 import { UpdateOneTaskDto } from './dto/update-task.dto';
 import { DeleteOneTaskDto } from './dto/delete-one-task.dto';
 import { GetOneTaskDto } from './dto/get-one-task.dto';
@@ -20,7 +20,7 @@ import { GetAllTaskPaginationDto } from './dto/get-all-tasks.dto';
 export class TaskManagerGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly nashvilleService: NashvilleService) {}
+  constructor(private readonly taskService: TaskService) {}
 
   private clients: Set<Socket> = new Set();
 
@@ -54,7 +54,7 @@ export class TaskManagerGateway
     )
     body: CreateTaskDto,
   ) {
-    return this.nashvilleService.createTask(body);
+    return this.taskService.createTask(body);
   }
   @SubscribeMessage('updateTask')
   updateTask(
@@ -70,7 +70,7 @@ export class TaskManagerGateway
     )
     body: UpdateOneTaskDto,
   ) {
-    return this.nashvilleService.updateTask(body.id, {
+    return this.taskService.updateTask(body.id, {
       description: body.description,
       title: body.title,
     });
@@ -87,7 +87,7 @@ export class TaskManagerGateway
     )
     body: DeleteOneTaskDto,
   ) {
-    return this.nashvilleService.deleteOneTask(body.id);
+    return this.taskService.deleteOneTask(body.id);
   }
   @SubscribeMessage('getOneTask')
   getOneTask(
@@ -100,7 +100,7 @@ export class TaskManagerGateway
     )
     body: GetOneTaskDto,
   ) {
-    return this.nashvilleService.getOneTask(body.id);
+    return this.taskService.getOneTask(body.id);
   }
   @SubscribeMessage('getAllTasks')
   getAllTasks(
@@ -116,7 +116,6 @@ export class TaskManagerGateway
     )
     body: GetAllTaskPaginationDto,
   ) {
-    console.log(body);
-    return this.nashvilleService.getAllTasks(body);
+    return this.taskService.getAllTasks(body);
   }
 }

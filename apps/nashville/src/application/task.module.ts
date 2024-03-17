@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { NashvilleController } from '../presenters/http/task.controller';
-import { NashvilleService } from './task.service';
+import { HttpTaskController } from '../presenters/http/task.controller';
+import { TaskService } from './task.service';
 import { TaskManagerGateway } from '../presenters/webSocket/task.gateway';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
@@ -9,7 +9,6 @@ import {
 } from 'proto/taskManager';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-console.log(join(__dirname, '..', '..', '..', 'proto', 'taskManager.proto'));
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,7 +36,7 @@ console.log(join(__dirname, '..', '..', '..', 'proto', 'taskManager.proto'));
       },
     ]),
   ],
-  controllers: [NashvilleController],
-  providers: [NashvilleService, TaskManagerGateway],
+  controllers: [HttpTaskController],
+  providers: [TaskService, TaskManagerGateway],
 })
 export class NashvilleModule {}
