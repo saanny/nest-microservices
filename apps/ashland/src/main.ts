@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(LoggerModule);
   const config = app.get<ConfigService>(ConfigService);
-  console.log(config.get<string>('ASHLAND_QUEUE'));
 
   app.connectMicroservice({
     transport: Transport.RMQ,

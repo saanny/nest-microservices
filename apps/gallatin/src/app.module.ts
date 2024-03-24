@@ -4,6 +4,7 @@ import { TaskInfrastructureModule } from './task/infrastructure/task-infrastruct
 import { CoreModule } from './core/core.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ConfigModule } from '@nestjs/config';
+import { TestController } from './test/test.controller';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     CqrsModule.forRoot(),
   ],
-  controllers: [],
+  controllers: [TestController],
   providers: [],
 })
 export class AppModule {
